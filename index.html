@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Create Map</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.28/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.28/"></script>
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+
+    <script type="text/javascript">
+        require(["esri/Map",
+            "esri/Basemap",
+            "esri/layers/TileLayer",
+            "esri/views/MapView",
+            "esri/layers/GraphicsLayer",
+            "esri/Graphic"
+        ], (
+            Map,
+            Basemap,
+            TileLayer,
+            MapView,
+            GraphicsLayer,
+            Graphic
+        ) => {
+            //添加底图
+            var lyTile = new TileLayer({
+                url: "http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer"
+            });
+            var baseMap = new Basemap({
+                baseLayers: [lyTile]
+            });
+            var map = new Map({
+                basemap: baseMap
+            });
+            var view = new MapView({
+                container: "viewDiv",
+                map: map,
+                zoom: 16,
+                center: [106.56657791438427, 29.679927608558902]
+            });
+
+            ////点击地图获取经纬度坐标
+            //view.on("click", evt => {
+            //    let mapPoint = evt.mapPoint;
+            //    alert(`经度：${mapPoint.longitude},纬度${mapPoint.latitude}`);
+            //});
+
+            //添加含图片样式的几何要素
+            var graphic = new Graphic({
+                geometry: point,
+                symbol: symbol
+            });
+            var graphicsLayer = new GraphicsLayer();
+            graphicsLayer.visible = true;
+            var point = {
+                type: "point",
+                x: 106.56657791438427,
+                y: 29.679927608558902,
+                SpatialReference: 3857
+            };
+            var symbol = {
+                type: "picture-marker",
+                url: "http://img14.360buyimg.com/n1/jfs/t2149/268/1108858690/251183/f7d770d0/5678c41eN59e3de7f.jpg",//访问小车图片
+                width: "50px",
+                height: "50px",
+                outline: {
+                    style: "solid"
+                },
+            };
+            var attributes = { name: '小车', content: '真是一辆漂亮的小车' };
+            var popupTemplate1 = {
+                title: "标题:" + attributes.name,
+                content: "内容:" + attributes.content
+            };
+            var graphic = new Graphic({
+                geometry: point,
+                symbol: symbol,
+                popupTemplate: popupTemplate1,
+            });
+            graphicsLayer.graphics.add(graphic);
+            map.add(graphicsLayer);
+        });
+    </script>
+</head>
+
+<body>
+    <div id="viewDiv"></div>
+</body>
+
+</html>
