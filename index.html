@@ -1,104 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="referrer" content="no-referrer|no-referrer-when-downgrade|origin|origin-when-crossorigin|unsafe-url">
-    <title>Create Map</title>
-    <link rel="stylesheet" href="https://js.arcgis.com/4.28/esri/themes/light/main.css" />
-    <script src="https://js.arcgis.com/4.28/"></script>
-    <style>
-        html,
-        body,
-        #viewDiv {
-            padding: 0;
-            margin: 0;
-            height: 100%;
-            width: 100%;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>获取点击处的经纬度</title>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.28/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.28/"></script>
+  <style>
+    html,
+    body {
+      position: relative;
+      padding: 0;
+      margin: 0;
+    }
 
-    <script type="text/javascript">
-        require(["esri/Map",
-            "esri/Basemap",
-            "esri/layers/TileLayer",
-            "esri/views/MapView",
-            "esri/layers/GraphicsLayer",
-            "esri/Graphic",
-            "esri/config",
-        ], (
-            Map,
-            Basemap,
-            TileLayer,
-            MapView,
-            GraphicsLayer,
-            Graphic,
-            esriConfig
-        ) => {
-            esriConfig.apiKey = "AAPKaf959a9766dc47c2b3198ec31cb621caazyYuI6Rog2IMjlrHUqOmO3bGZ_NtrfDi4BWrfZcShB2nDof9rXV8Qlp3emEnR5Q";
-            //添加底图
-            var lyTile = new TileLayer({
-                url: "http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer"
-            });
-            var baseMap = new Basemap({
-                baseLayers: [lyTile]
-            });
-            var map = new Map({
-                basemap: baseMap
-            });
-            var view = new MapView({
-                container: "viewDiv",
-                map: map,
-                zoom: 16,
-                center: [106.56657791438427, 29.679927608558902]
-            });
+    .map {
+      width: 100vw;
+      height: 100vh;
+    }
 
-            ////点击地图获取经纬度坐标
-            //view.on("click", evt => {
-            //    let mapPoint = evt.mapPoint;
-            //    alert(`经度：${mapPoint.longitude},纬度${mapPoint.latitude}`);
-            //});
-
-            //添加含图片样式的几何要素
-            var graphic = new Graphic({
-                geometry: point,
-                symbol: symbol
-            });
-            var graphicsLayer = new GraphicsLayer();
-            graphicsLayer.visible = true;
-            var point = {
-                type: "point",
-                x: 106.56657791438427,
-                y: 29.679927608558902,
-                SpatialReference: 3857
-            };
-            var symbol = {
-                type: "picture-marker",
-                url: "train.png",//访问图片car.pngtrain.png
-                width: "50px",
-                height: "50px",
-                outline: {
-                    style: "solid"
-                },
-            };
-            var attributes = { name: '动车', content: '真是一辆漂亮的动车' };
-            var popupTemplate1 = {
-                title: "标题:" + attributes.name,
-                content: "内容:" + attributes.content
-            };
-            var graphic = new Graphic({
-                geometry: point,
-                symbol: symbol,
-                popupTemplate: popupTemplate1,
-            });
-            graphicsLayer.graphics.add(graphic);
-            map.add(graphicsLayer);
-        });
-    </script>
+    .button {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+    }
+  </style>
 </head>
 
 <body>
-    <div id="viewDiv"></div>
+  <div id="map" class="map"> </div>
+  <script>
+    var map, view;
+    var gisModules = {};
+    require([
+      "esri/Map",
+      "esri/WebMap",
+      "esri/views/MapView",
+      "esri/layers/WebTileLayer"
+    ], function (Map, WebMap, MapView, WebTileLayer) {
+      gisModules.Map = Map;
+      gisModules.WebMap = WebMap;
+      gisModules.MapView = MapView;
+      gisModules.WebTileLayer = WebTileLayer;
+
+      map = new gisModules.Map({
+        basemap: "streets"
+      });
+      view = new gisModules.MapView({
+        container: "map",
+        map: map,
+        zoom: 4,
+        center: [116, 39]
+      });
+	  
+	view.on("click", evt => {
+	let mapPoint = evt.mapPoint;
+	alert(`经度：${mapPoint.longitude},纬度${mapPoint.latitude}`);
+	});
+    });
+
+
+  </script>
 </body>
 
 </html>
