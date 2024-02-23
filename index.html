@@ -20,7 +20,7 @@
     <script type="text/javascript">
         require(["esri/Map",
             "esri/Basemap",
-            "esri/layers/TileLayer",
+            "esri/layers/MapImageLayer",
             "esri/views/MapView",
             "esri/layers/GraphicsLayer",
             "esri/Graphic",
@@ -36,7 +36,7 @@
         ) => {
             esriConfig.apiKey = "AAPKaf959a9766dc47c2b3198ec31cb621caazyYuI6Rog2IMjlrHUqOmO3bGZ_NtrfDi4BWrfZcShB2nDof9rXV8Qlp3emEnR5Q";
             //添加底图
-            var lyTile = new TileLayer({
+            var lyTile = new MapImageLayer({
                 url: "http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer"
             });
             var baseMap = new Basemap({
