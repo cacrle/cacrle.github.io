@@ -38,8 +38,10 @@
       "esri/Map",
       "esri/WebMap",
       "esri/views/MapView",
-      "esri/layers/WebTileLayer"
-    ], function (Map, WebMap, MapView, WebTileLayer) {
+      "esri/layers/WebTileLayer",
+      "esri/layers/GraphicsLayer",
+       "esri/Graphic"
+    ], function (Map, WebMap, MapView, WebTileLayer,GraphicsLayer,Graphic) {
       gisModules.Map = Map;
       gisModules.WebMap = WebMap;
       gisModules.MapView = MapView;
@@ -51,17 +53,50 @@
       view = new gisModules.MapView({
         container: "map",
         map: map,
-        zoom: 4,
-        center: [116, 39]
+        zoom: 16,
+        center: [106.56272626223878, 29.68290570918428]
       });
 	  
-	view.on("click", evt => {
-	let mapPoint = evt.mapPoint;
-	alert(`经度：${mapPoint.longitude},纬度${mapPoint.latitude}`);
-	});
+	//view.on("click", evt => {
+	//let mapPoint = evt.mapPoint;
+	//alert(`经度：${mapPoint.longitude},纬度${mapPoint.latitude}`);
+	//});
+
+	    //添加含图片样式的几何要素
+            var graphic = new Graphic({
+                geometry: point,
+                symbol: symbol
+            });
+            var graphicsLayer = new GraphicsLayer();
+            graphicsLayer.visible = true;
+            var point = {
+                type: "point",
+                x: 106.56272626223878,
+                y: 29.68290570918428,
+                SpatialReference: 3857
+            };
+            var symbol = {
+                type: "picture-marker",
+                url: "train.png",//访问图片car.pngtrain.png
+                width: "60px",
+                height: "60px",
+                outline: {
+                    style: "solid"
+                },
+            };
+            var attributes = { name: '动车', content: '真是一辆漂亮的动车' };
+            var popupTemplate1 = {
+                title: "标题:" + attributes.name,
+                content: "内容:" + attributes.content
+            };
+            var graphic = new Graphic({
+                geometry: point,
+                symbol: symbol,
+                popupTemplate: popupTemplate1,
+            });
+            graphicsLayer.graphics.add(graphic);
+            map.add(graphicsLayer);
     });
-
-
   </script>
 </body>
 
