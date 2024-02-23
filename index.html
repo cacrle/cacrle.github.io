@@ -23,15 +23,18 @@
             "esri/layers/TileLayer",
             "esri/views/MapView",
             "esri/layers/GraphicsLayer",
-            "esri/Graphic"
+            "esri/Graphic",
+            "esri/config",
         ], (
             Map,
             Basemap,
             TileLayer,
             MapView,
             GraphicsLayer,
-            Graphic
+            Graphic,
+            esriConfig
         ) => {
+            esriConfig.apiKey = "AAPKaf959a9766dc47c2b3198ec31cb621caazyYuI6Rog2IMjlrHUqOmO3bGZ_NtrfDi4BWrfZcShB2nDof9rXV8Qlp3emEnR5Q";
             //添加底图
             var lyTile = new TileLayer({
                 url: "http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer"
